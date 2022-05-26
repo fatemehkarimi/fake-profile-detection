@@ -4,6 +4,7 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn import metrics
+import matplotlib.pyplot as plt
 
 df=pd.read_csv('fake-profile-dataset.csv')
 df.dropna(inplace = True)
@@ -30,7 +31,15 @@ for feat, importance in zip(df.columns, rfc.feature_importances_):
     feature_importance[feat]=importance
     print('feature: {f}, importance: {i}'.format(f=feat, i=importance))
 
-sfm = SelectFromModel(rfc, threshold=0.05)
+names = list(feature_importance.keys())
+values = list(feature_importance.values())
+
+plt.bar(range(len(feature_importance)), values)
+plt.xticks(range(len(feature_importance)), names, rotation=90)
+plt.title("Feature Importance")
+plt.show()
+
+sfm = SelectFromModel(rfc, threshold=0.01)
 sfm.fit(x_train, y_train)
 
 selected_feature=[]
