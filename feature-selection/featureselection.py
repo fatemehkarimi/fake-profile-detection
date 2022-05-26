@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 
 df=pd.read_csv('fake-profile-dataset.csv')
 df.dropna(inplace = True)
-#df = df.drop('followerCount',axis=1)
-#df = df.drop('followingCount',axis=1)
+
 df = df.drop('followertofollowing',axis=1)
+
 #split to train and test
 y=df['isFake']
 x=df.drop(['isFake'],axis=1)
@@ -25,6 +25,7 @@ rfc = RandomForestClassifier(n_estimators=10000, random_state=0)
 rfc.fit(x_train, y_train)
 y_pred = rfc.predict(x_test)
 print("RandomForest's Accuracy: ", metrics.accuracy_score(y_test,y_pred))
+
 #find feature importance
 feature_importance={}
 for feat, importance in zip(df.columns, rfc.feature_importances_):
@@ -44,7 +45,6 @@ sfm.fit(x_train, y_train)
 
 selected_feature=[]
 for feature_list_index in sfm.get_support(indices=True):
-    #print(df.columns[feature_list_index])
     selected_feature.append(df.columns[feature_list_index])
 selected_feature.append('isFake')
 for col in df.columns:
